@@ -53,6 +53,9 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove \
     && rm -r /var/lib/apt/lists/*
 
+RUN pecl install \
+    mongodb
+
 COPY php.ini /usr/local/etc/php/
 COPY ports.conf /etc/apache2/ports.conf
 COPY sites-enabled/*.conf /etc/apache2/sites-enabled/
@@ -61,14 +64,14 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
 
-RUN a2enmod rewrite ssl && \
-    curl -sS https://getcomposer.org/installer | \
-    php -- --install-dir=/usr/local/bin --filename=composer
+WORKDIR /home/php/app
+
+RUN a2enmod rewrite ssl \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && chown php.php /home/php
 
 USER php
 
 EXPOSE 8080 4433
-
-WORKDIR /home/php/app
 
 CMD ["apache2-foreground"]
