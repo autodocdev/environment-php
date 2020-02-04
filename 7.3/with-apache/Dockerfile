@@ -4,8 +4,6 @@ LABEL maintainer="dcorrea@autodoc.com.br;dlemos@autodoc.com.br"
 
 ENV APACHE_RUN_USER php
 ENV APACHE_RUN_GROUP php
-ENV APACHE_DOCUMENT_ROOT /home/php/app/public
-ENV APACHE_SERVER_NAME localhost
 ENV APPLICATION \
     git \
     wget \
@@ -60,7 +58,6 @@ COPY php.ini /usr/local/etc/php/
 COPY ports.conf /etc/apache2/ports.conf
 COPY sites-enabled/*.conf /etc/apache2/sites-enabled/
 
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN ln -sf /dev/stdout /var/log/apache2/access.log
 RUN ln -sf /dev/stderr /var/log/apache2/error.log
 
