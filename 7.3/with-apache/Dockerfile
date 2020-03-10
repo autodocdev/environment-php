@@ -7,7 +7,8 @@ ENV APACHE_RUN_GROUP php
 ENV APPLICATION \
     git \
     wget \
-    curl
+    curl \
+    unzip
 
 ENV PHP_DEPS \
     libpng-dev \
@@ -33,7 +34,8 @@ ENV EXTENSION \
     tokenizer \
     xsl \
     gd \
-    mbstring
+    mbstring \
+    pcntl
 
 RUN groupadd --gid 1000 php \
     && useradd --uid 1000 --gid php -m php
@@ -65,7 +67,7 @@ WORKDIR /home/php/app
 
 RUN a2enmod rewrite ssl \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && chown php.php /home/php
+    && chown php.php -R /home/php
 
 USER php
 
