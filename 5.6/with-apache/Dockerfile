@@ -33,6 +33,8 @@ ENV EXTENSION \
     mbstring \
     pdo \
     pdo_mysql \
+    mysql \
+    mysqli \
     xml \
     json \
     opcache \
